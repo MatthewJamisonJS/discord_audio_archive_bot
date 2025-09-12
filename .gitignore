@@ -1,0 +1,52 @@
+# Discord Audio Archive Bot - .gitignore
+# ========================================
+
+# Credentials & Environment Variables
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.token
+secrets/
+
+# Audio Files & Recordings
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+recordings/
+
+# Runtime Data & Logs
+*.log
+logs/
+voice_commands.json
+voice_status.json
+npm_install.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+venv/
+
+# Node.js
+node_modules/
+
+# System Files
+.DS_Store
+._*
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Temporary Files
+*.tmp
+*.temp
