@@ -62,8 +62,8 @@ node voice_recorder.js      # Terminal 2: Voice processor
 - **Monitors voice channel activity** *(Python component watches for voice state changes)*
 - **Prepares audio processing pipeline** *(Node.js component initializes FFmpeg for recording)*
 
-### 2. **Target Detection**
-- **Watches for your target person** *(Monitors Discord events for specific user ID)*
+### 2. **Counter-Party Detection**
+- **Watches for your counter-party** *(Monitors Discord events for specific user ID)*
 - **Detects when they join ANY voice channel** *(Automatically scans all channels in your servers)*
 - **Triggers recording sequence** *(Sends command from Python to Node.js via JSON file)*
 
@@ -74,7 +74,7 @@ node voice_recorder.js      # Terminal 2: Voice processor
 - **Saves with smart filename** *(Format: `MM_DD_YYYY_HH-MM-SS_Username_UniqueID.mp3`)*
 
 ### 4. **Smart Management**
-- **Follows user between channels** *(Automatically moves recording when target switches channels)*
+- **Follows user between channels** *(Automatically moves recording when counter-party switches channels)*
 - **Stops when user leaves** *(Ends recording and finalizes MP3 file)*
 - **Cleans up resources** *(Disconnects from voice, frees memory)*
 
@@ -94,9 +94,9 @@ node voice_recorder.js      # Terminal 2: Voice processor
 4. **Copy Token** → Paste into `.env` file as `DISCORD_TOKEN`
 5. **Set Permissions** → Enable: Connect, Speak, Use Voice Activity *(Minimal permissions for security)*
 
-### Target User Setup  
+### Counter-Party User Setup  
 1. **Enable Developer Mode** *(Discord Settings → Advanced → Developer Mode)*
-2. **Right-click target user** → Copy ID
+2. **Right-click counter-party user** → Copy ID
 3. **Paste into `.env`** as `TARGET_USER_ID` *(Bot will only record this specific person)*
 
 ### Email Setup (Optional)
@@ -111,7 +111,7 @@ node voice_recorder.js      # Terminal 2: Voice processor
 ## 🎯 How Each Feature Works
 
 ### 🔍 **Smart Detection System**
-The bot uses Discord's voice state events to monitor when your target person joins or leaves voice channels *(Python component listens to WebSocket events and processes them)*
+The bot uses Discord's voice state events to monitor when your counter-party joins or leaves voice channels *(Python component listens to WebSocket events and processes them)*
 
 ### 🎙️ **High-Quality Recording**  
 Audio is captured directly from Discord's voice gateway at 48kHz stereo, then processed through FFmpeg for optimal MP3 compression *(Node.js handles real-time audio streams with minimal latency)*
