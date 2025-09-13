@@ -204,14 +204,14 @@ python -c "from voice_manager_hybrid import HybridVoiceManager; print(HybridVoic
 
 ---
 
-## 🌟 Join Our Community
+## 🌟 Contributing & Support
 
 We'd love your help making this even better!
 
-- **🐛 Found a bug?** → [Report it](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/issues)
-- **💡 Have an idea?** → [Share it](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/discussions)  
+- **🐛 Found a bug?** → Use the Issues tab on this GitHub repository
+- **💡 Have an idea?** → Submit a feature request via GitHub Issues  
 - **🔧 Want to contribute?** → See [CONTRIBUTING.md](CONTRIBUTING.md)
-- **❓ Need help?** → Check [Documentation](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/wiki)
+- **❓ Need help?** → Check the repository documentation and existing Issues
 
 **⭐ Star this repo if it helped you!** It helps others find this project.
 
@@ -248,6 +248,6 @@ We'd love your help making this even better!
 
 *Start recording your Discord memories today!*
 
-[📖 Documentation](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/wiki) • [🚀 Quick Start](#-quick-start-5-minutes) • [💬 Community](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/discussions)
+[🚀 Quick Start](#-quick-start-5-minutes) • [🔧 Troubleshooting](#-troubleshooting) • [🌟 Contributing](#-contributing--support)
 
 </div>
