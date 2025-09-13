@@ -16,7 +16,7 @@ The Discord Audio Archive Bot handles sensitive data including Discord tokens, e
 
 If you discover a security vulnerability, please follow responsible disclosure:
 
-1. **Email:** Send details to [your-email@domain.com]
+1. **Email:** Send details to the project maintainers via GitHub Issues (mark as security vulnerability)
 2. **Include:**
    - Description of the vulnerability
    - Steps to reproduce
