@@ -722,7 +722,7 @@ create_systemd_service() {
     cat > "discord-audio-bot.service" << EOF
 [Unit]
 Description=Discord Audio Archive Bot - Hybrid Python/Node.js Service
-Documentation=https://github.com/MatthewJamisonJS/discord-audio-archive-bot
+Documentation=https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
 After=network-online.target
 Wants=network-online.target
 StartLimitBurst=3
