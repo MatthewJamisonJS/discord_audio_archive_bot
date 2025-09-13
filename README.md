@@ -1,21 +1,20 @@
 # 🎙️ Discord Audio Archive Bot
 
->> **Preserve your**Preserve your Discord voice conversations withwith crystal-clear qualityquality**
+> **Preserve your Discord voice conversations with crystal-clear quality**
 
-**Welcome! 👋** This intelligent, intelligent bot automatically capturescaptures Discord voice conversations in professionalprofessional-quality MP3 format. Perfect for preserving important meetings, memorable gaming sessions, or specialspecial moments with friends.
+**Welcome! 👋** This intelligent bot automatically captures Discord voice conversations in professional-quality MP3 format. Perfect for preserving important meetings, memorable gaming sessions, or special moments with friends.
 
-✨ **Set**Set it up once, enjoy forever, enjoy forever** —  — The bot quietly quietly monitors Discord and handleshandles everythingeverything automaticallyautomatically.
+✨ **Set it up once, enjoy forever** — The bot quietly monitors Discord and handles everything automatically.
 
 ---
 
-## 🚀 Quick Start (3 minutes!5 minutes!)
+## 🚀 Quick Start (5 minutes!)
 
 ### What You Need
-- AnyAny computer with internet +(Windows, macOS, or Linux)
+- Any computer (Windows, macOS, or Linux)
 - Discord account
 - Internet connection
 
-### Option 1: Super Easy Setup
 ### Option 1: Universal Auto-Setup ⚡
 ```bash
 curl -O https://raw.githubusercontent.com/[YOUR-USERNAME]/discord-audio-archive-bot/main/setup_universal.sh
@@ -40,64 +39,58 @@ cd discord-audio-archive-bot
 
 ```bash
 # Install dependencies manually
- -O https://raw.githubusercontent.com/your-username/discord-audio-archive-bot/main/setup_universal.sh
-chmod +x setup_universal.sh && ./setup_universal.sh
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+npm install
+
 # Configure your settings
+cp .env.example .env
+# Edit .env with your Discord bot token and settings
 
- .envDiscord bot token and 
-
-# Run in two terminals        Terminal1:Event monitor      Terminal2: Voice processor
+# Run in two terminals
+python hybrid_bot.py        # Terminal 1: Event monitor
+node voice_recorder.js      # Terminal 2: Voice processor
 ```
-
-### Option 2: Traditional Setup  
-1. **Download** → `git clone https://github.com/your-username/discord-audio-archive-bot.git`
-2. **Setup** → `cd discord-audio-archive-bot && ./setup_universal.sh`  
-3. **Configure** → Edit `.env` with your Discord bot token
-4. **Run** → `./run_bot_forever.sh` (runs in background permanently)
-
-**🎉 Done!** Your bot now intelligently monitors Discord and creates perfect recordings.
+</details>
 
 ---
 
-## 📋 Step-by-Step: What Happens When  This SpecialRun It
+## 📋 Step-by-Step: What Happens When You Run It
 
-### 1. **Intelligent**Initial Setup** 
-- Automatically detects**Creates Discord bot connection** *(Uses your bot token to connect to Discord API)*
+### 1. **Initial Setup** 
+- **Creates Discord bot connection** *(Uses your bot token to connect to Discord API)*
 - **Monitors voice channel activity** *(Python component watches for voice state changes)*
-- **Prepares recording audio processing when they leave
-- Zero manual intervention requiredpipeline** *(Node.js component initializes FFmpeg for recording)*
+- **Prepares audio processing pipeline** *(Node.js component initializes FFmpeg for recording)*
 
-### 2. ****TargetDetection****Watches Audiofor Quality**  
-- Records at Discord's native 48kHz stereoyour target person** *(Monitors Discord events for specific user ID)*
-- Converts**Detects to optimized 256kbps MP3
-- Crystal-clear audio that preserves every wordwhen they join ANY voice channel** *(Automatically scans all channels in your servers)*
+### 2. **Target Detection**
+- **Watches for your target person** *(Monitors Discord events for specific user ID)*
+- **Detects when they join ANY voice channel** *(Automatically scans all channels in your servers)*
 - **Triggers recording sequence** *(Sends command from Python to Node.js via JSON file)*
 
-### 3. **Seamless**Automatic Recording****
-- Optional email**Bot joins the voice channel** *Connects using Discord's voice API*
-- Smart**Starts filenamecapturing format:audio** `*(Records at 48kHz stereo quality directly from Discord)*
+### 3. **Automatic Recording**
+- **Bot joins the voice channel** *(Connects using Discord's voice API)*
+- **Starts capturing audio** *(Records at 48kHz stereo quality directly from Discord)*
 - **Processes audio in real-time** *(Converts Opus codec to PCM then to MP3)*
-- **Saves with smart filename** *(Format: `MM_DD_YYYY_HH-MM-SS_Username_UniqueID.mp3`
-- Local storage backup for reliability`)*
+- **Saves with smart filename** *(Format: `MM_DD_YYYY_HH-MM-SS_Username_UniqueID.mp3`)*
 
-### 4. ****Smart-Management** Design**
+### 4. **Smart Management**
 - **Follows user between channels** *(Automatically moves recording when target switches channels)*
-- No**Stops cloudwhen storage or third-party services
-- You control everything
-
-### 🌍 **Cross-Platform**
-- **macOS**: Full support with background services
-- **Linux**: Systemd integration  
-- **Windows**: Service installation available
-- **All platforms**: Manual mode always worksuser leaves** *(Ends recording and finalizes MP3 file)*
+- **Stops when user leaves** *(Ends recording and finalizes MP3 file)*
 - **Cleans up resources** *(Disconnects from voice, frees memory)*
 
 ### 5. **Optional Email Delivery**
 - **Sends completed recording** *(Attaches MP3 to email with metadata)*
 - **Includes recording details** *(Date, duration, username in email body)*
 - **Falls back to local storage** *(Always saves locally even if email fails)*
-⚙️ConfigurationGuide###DiscordBotSetup1. **Go to [Discord Developer Portal](https://discord.com/developers/applications)**2. **Create New Application** → Name it "Audio Archive Bot"
-3. **Go to secure and privateBot section** → Click "Add Bot"
+
+---
+
+## ⚙️ Configuration Guide
+
+### Discord Bot Setup
+1. **Go to [Discord Developer Portal](https://discord.com/developers/applications)**
+2. **Create New Application** → Name it "Audio Archive Bot"
+3. **Go to Bot section** → Click "Add Bot"
 4. **Copy Token** → Paste into `.env` file as `DISCORD_TOKEN`
 5. **Set Permissions** → Enable: Connect, Speak, Use Voice Activity *(Minimal permissions for security)*
 
@@ -181,16 +174,15 @@ This tool helps preserve meaningful conversations, but **consent is essential**:
 
 ---
 
-## 🔧 Need Help?
+## 🔧 Troubleshooting
 
-###### QuickQuick FixesHealthCheck
+### Quick Health Check
 ```bash
-# Test everything is working
 python test_hybrid_system.py
 # Runs 7 system tests to verify everything works
 ```
 
-### ### Common Issues & Solutions
+### Common Issues & Solutions
 
 | Problem | Solution | How It Works |
 |---------|----------|--------------|
@@ -212,7 +204,7 @@ python -c "from voice_manager_hybrid import HybridVoiceManager; print(HybridVoic
 
 ---
 
-## 🌟🌟 Join Our CommunityJoin Our Community
+## 🌟 Join Our Community
 
 We'd love your help making this even better!
 
@@ -225,7 +217,7 @@ We'd love your help making this even better!
 
 ---
 
-## 📊 System Requirements & Credits
+## 📊 System Requirements
 
 | Component | Minimum | Recommended | Purpose |
 |-----------|---------|-------------|---------|
@@ -252,7 +244,7 @@ We'd love your help making this even better!
 
 <div align="center">
 
-****Built with ❤️ for preservingpreserving preciousprecious momentsmoments**
+**Built with ❤️ for preserving precious moments**
 
 *Start recording your Discord memories today!*
 
