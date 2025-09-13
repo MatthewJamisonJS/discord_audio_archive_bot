@@ -142,7 +142,7 @@ For version-specific issues:
 - **Previous Versions**: Security updates only
 - **Development Versions**: No support
 
-Report issues at: https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot/issues
+Report issues at: https://github.com/MatthewJamisonJS/discord-audio-archive-bot/issues
 
 ---
 

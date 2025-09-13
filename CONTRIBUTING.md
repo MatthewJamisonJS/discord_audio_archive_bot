@@ -23,7 +23,7 @@ All contributions must:
 ### Development Environment Setup
 ```bash
 # Fork and clone the repository
-git clone https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot.git
+git clone https://github.com/MatthewJamisonJS/discord-audio-archive-bot.git
 cd discord-audio-archive-bot
 
 # Create development environment

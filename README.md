@@ -17,7 +17,7 @@
 
 ### Option 1: Universal Auto-Setup ⚡
 ```bash
-curl -O https://raw.githubusercontent.com/[YOUR-USERNAME]/discord-audio-archive-bot/main/setup_universal.sh
+curl -O https://raw.githubusercontent.com/MatthewJamisonJS/discord-audio-archive-bot/main/setup_universal.sh
 chmod +x setup_universal.sh && ./setup_universal.sh
 ```
 *(Detects your platform and installs everything automatically)*
@@ -25,7 +25,7 @@ chmod +x setup_universal.sh && ./setup_universal.sh
 ### Option 2: Manual Setup 🔧
 ```bash
 # 1. Download the project
-git clone https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot.git
+git clone https://github.com/MatthewJamisonJS/discord-audio-archive-bot.git
 cd discord-audio-archive-bot
 
 # 2. Run setup script  
@@ -208,10 +208,10 @@ python -c "from voice_manager_hybrid import HybridVoiceManager; print(HybridVoic
 
 We'd love your help making this even better!
 
-- **🐛 Found a bug?** → [Report it](https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot/issues)
-- **💡 Have an idea?** → [Share it](https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot/discussions)  
+- **🐛 Found a bug?** → [Report it](https://github.com/MatthewJamisonJS/discord-audio-archive-bot/issues)
+- **💡 Have an idea?** → [Share it](https://github.com/MatthewJamisonJS/discord-audio-archive-bot/discussions)  
 - **🔧 Want to contribute?** → See [CONTRIBUTING.md](CONTRIBUTING.md)
-- **❓ Need help?** → Check [Documentation](https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot/wiki)
+- **❓ Need help?** → Check [Documentation](https://github.com/MatthewJamisonJS/discord-audio-archive-bot/wiki)
 
 **⭐ Star this repo if it helped you!** It helps others find this project.
 
@@ -248,6 +248,6 @@ We'd love your help making this even better!
 
 *Start recording your Discord memories today!*
 
-[📖 Documentation](https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot/wiki) • [🚀 Quick Start](#-quick-start-5-minutes) • [💬 Community](https://github.com/[YOUR-USERNAME]/discord-audio-archive-bot/discussions)
+[📖 Documentation](https://github.com/MatthewJamisonJS/discord-audio-archive-bot/wiki) • [🚀 Quick Start](#-quick-start-5-minutes) • [💬 Community](https://github.com/MatthewJamisonJS/discord-audio-archive-bot/discussions)
 
 </div>
