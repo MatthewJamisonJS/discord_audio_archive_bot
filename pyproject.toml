@@ -150,9 +150,10 @@ addopts = [
     "--verbose",
     "--strict-markers",
     "--strict-config",
-    "--cov=.",
-    "--cov-report=term-missing",
-    "--cov-report=html",
+    # Coverage options require pytest-cov: pip install pytest-cov
+    # "--cov=.",
+    # "--cov-report=term-missing",
+    # "--cov-report=html",
 ]
 
 # Coverage configuration

@@ -3,10 +3,11 @@
 Command-line interface for the Audio Archive Bot.
 """
 
-import sys
-import os
 import logging
+import os
+import sys
 from pathlib import Path
+
 
 def main():
     """Main entry point for the audio archive bot CLI."""
@@ -18,10 +19,11 @@ def main():
 
         # Load environment variables first
         from dotenv import load_dotenv
+
         load_dotenv()
 
         # Validate required configuration
-        DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+        DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
         if not DISCORD_TOKEN:
             print("Error: Missing required environment variable: DISCORD_TOKEN")
             print("Please configure your .env file with Discord credentials")
@@ -30,7 +32,7 @@ def main():
             print("  TARGET_USER_ID=user_id_to_monitor")
             sys.exit(1)
 
-        TARGET_USER_ID = os.getenv('TARGET_USER_ID')
+        TARGET_USER_ID = os.getenv("TARGET_USER_ID")
         if not TARGET_USER_ID:
             print("Error: Missing required environment variable: TARGET_USER_ID")
             print("Please configure your .env file with the user ID to monitor")
@@ -54,6 +56,7 @@ def main():
         print(f"\nFatal error: {e}")
         print("Check hybrid_bot.log for details")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
