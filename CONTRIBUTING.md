@@ -23,13 +23,22 @@ All contributions must:
 ### Development Environment Setup
 ```bash
 # Fork and clone the repository
-git clone https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git
+git clone https://github.com/MatthewJamisonJS/discord_audio_archive_bot.git
 cd discord-audio-archive-bot
 
 # Create development environment
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
+# Install development dependencies (includes pre-commit, black, flake8, etc.)
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+
+# (Optional) Run pre-commit on all files to verify setup
+pre-commit run --all-files
 
 # Run diagnostics
 python troubleshoot.py
@@ -44,6 +53,78 @@ python test_integration.py
 - **FFmpeg** installed via Homebrew
 - **Test Discord server** (for safe testing)
 - **Gmail test account** with App Password
+
+## 🛠️ Code Quality Tools
+
+This project uses automated code quality tools to maintain consistency and catch issues early.
+
+### Pre-commit Hooks
+
+Pre-commit hooks run automatically before each commit to ensure code quality. The hooks include:
+
+**Python Tools:**
+- **Black**: Automatic code formatting (100 character line length)
+- **isort**: Import sorting (compatible with Black)
+- **Flake8**: Code linting for style and logical errors
+- **Bandit**: Security vulnerability scanning
+
+**General File Checks:**
+- Trailing whitespace removal
+- End-of-file newline enforcement
+- YAML/JSON syntax validation
+- Merge conflict detection
+- Large file prevention (>500KB)
+- Private key detection
+- Dependency security scanning
+
+### Using Pre-commit Hooks
+
+```bash
+# Install hooks (one-time setup)
+pre-commit install
+
+# Run manually on all files
+pre-commit run --all-files
+
+# Run on staged files only
+pre-commit run
+
+# Run specific hook
+pre-commit run black --all-files
+pre-commit run flake8 --all-files
+pre-commit run bandit --all-files
+
+# Update hooks to latest versions
+pre-commit autoupdate
+
+# Bypass hooks (use sparingly!)
+git commit --no-verify -m "Emergency fix"
+```
+
+### Code Style Configuration
+
+The project uses these settings for consistency:
+- **Line length**: 100 characters (Black and Flake8)
+- **Python version**: 3.8+ compatible
+- **Import style**: Black-compatible isort
+- **Security**: Bandit in light mode to avoid false positives
+
+All configuration is in:
+- `/Users/wwjd_._/Code/audio_archive_bot/.pre-commit-config.yaml` - Pre-commit hook configuration
+- `/Users/wwjd_._/Code/audio_archive_bot/pyproject.toml` - Black, isort, and Bandit settings
+- `/Users/wwjd_._/Code/audio_archive_bot/.flake8` - Flake8 configuration
+
+### Automated Dependency Updates
+
+**Dependabot** monitors dependencies and creates automated pull requests:
+
+- **Python (pip)**: Weekly checks for `requirements.txt` updates
+- **Node.js (npm)**: Weekly checks for `package.json` updates
+- **GitHub Actions**: Weekly checks for workflow updates
+- **Schedule**: Mondays at 9:00 AM
+- **PR Limit**: Maximum 5 open PRs per ecosystem
+
+Configuration: `/Users/wwjd_._/Code/audio_archive_bot/.github/dependabot.yml`
 
 ## 📋 Contribution Types
 
@@ -185,10 +266,12 @@ def test_your_feature(self):
 
 ### Automated Checks
 All PRs must pass:
+- ✅ Pre-commit hooks (Black, isort, Flake8, Bandit)
 - ✅ Integration test suite
-- ✅ Code style validation
-- ✅ Security linting (if implemented)
-- ✅ Documentation build
+- ✅ Code style validation (100 char line length)
+- ✅ Security linting (Bandit security scanner)
+- ✅ YAML/JSON validation
+- ✅ No trailing whitespace or merge conflicts
 
 ### Manual Review Focus Areas
 - **Security implications** of changes

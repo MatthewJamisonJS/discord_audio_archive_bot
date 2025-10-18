@@ -1,0 +1,197 @@
+name: Build & Package Validation
+
+# Trigger on pull requests and pushes to main
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-package:
+    name: Build Python Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine setuptools wheel
+
+      - name: Create setup.py for packaging
+        run: |
+          cat > setup.py << 'EOF'
+          from setuptools import setup, find_packages
+
+          with open("README.md", "r", encoding="utf-8") as fh:
+              long_description = fh.read()
+
+          with open("requirements.txt", "r", encoding="utf-8") as fh:
+              requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+
+          setup(
+              name="audio-archive-bot",
+              version="1.0.0",
+              author="Audio Archive Bot Contributors",
+              description="Discord bot for archiving voice channel audio with hybrid Python/Node.js architecture",
+              long_description=long_description,
+              long_description_content_type="text/markdown",
+              url="https://github.com/your-username/audio_archive_bot",
+              py_modules=["hybrid_bot", "voice_manager_hybrid", "test_hybrid_system"],
+              python_requires=">=3.8",
+              install_requires=requirements,
+              classifiers=[
+                  "Development Status :: 4 - Beta",
+                  "Intended Audience :: Developers",
+                  "License :: OSI Approved :: MIT License",
+                  "Programming Language :: Python :: 3",
+                  "Programming Language :: Python :: 3.8",
+                  "Programming Language :: Python :: 3.9",
+                  "Programming Language :: Python :: 3.10",
+                  "Programming Language :: Python :: 3.11",
+                  "Programming Language :: Python :: 3.12",
+              ],
+              extras_require={
+                  "dev": ["pytest", "pytest-cov", "pytest-asyncio", "black", "flake8", "isort"],
+              },
+          )
+          EOF
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check package with twine
+        run: twine check dist/*
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  test-installation:
+    name: Test Package Installation
+    runs-on: ${{ matrix.os }}
+    needs: build-package
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.8', '3.11', '3.12']
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Install package from wheel
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install dist/*.whl
+
+      - name: Verify installation
+        shell: bash
+        run: |
+          python -c "import discord; print(f'discord.py {discord.__version__} installed successfully')"
+          python -c "import dotenv; print('python-dotenv installed successfully')"
+
+  build-docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create Dockerfile
+        run: |
+          cat > Dockerfile << 'EOF'
+          FROM node:20-slim
+
+          # Install Python and system dependencies
+          RUN apt-get update && apt-get install -y \
+              python3 \
+              python3-pip \
+              python3-venv \
+              ffmpeg \
+              && rm -rf /var/lib/apt/lists/*
+
+          # Set working directory
+          WORKDIR /app
+
+          # Copy package files
+          COPY package*.json ./
+          COPY requirements.txt ./
+
+          # Install Node.js dependencies
+          RUN npm ci --only=production
+
+          # Install Python dependencies
+          RUN pip3 install --no-cache-dir -r requirements.txt
+
+          # Copy application files
+          COPY . .
+
+          # Create recordings directory
+          RUN mkdir -p /app/recordings
+
+          # Default command (can be overridden)
+          CMD ["python3", "hybrid_bot.py"]
+          EOF
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: audio-archive-bot:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker image
+        run: |
+          docker run --rm audio-archive-bot:test python3 --version
+          docker run --rm audio-archive-bot:test node --version
+          docker run --rm audio-archive-bot:test ffmpeg -version
+
+  validate-scripts:
+    name: Validate Shell Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck on all shell scripts
+        run: |
+          find . -name "*.sh" -type f -exec shellcheck {} \; || true
+
+      - name: Test setup script syntax
+        run: |
+          bash -n setup_universal.sh
+          bash -n run_bot_forever.sh
+          bash -n run_hybrid.sh

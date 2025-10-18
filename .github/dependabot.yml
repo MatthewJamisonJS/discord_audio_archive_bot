@@ -1,0 +1,101 @@
+# Dependabot configuration for automated dependency updates
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Monitor Python dependencies (pip)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    # Limit the number of open pull requests for pip dependencies
+    open-pull-requests-limit: 5
+    # Customize commit messages
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    # Target branch for pull requests
+    target-branch: "main"
+    # Group updates by dependency type for cleaner PRs
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+    # Automatically label PRs
+    labels:
+      - "dependencies"
+      - "python"
+    # Optional: Add reviewers (uncomment and customize as needed)
+    # reviewers:
+    #   - "your-github-username"
+    # Optional: Add assignees (uncomment and customize as needed)
+    # assignees:
+    #   - "your-github-username"
+
+  # Monitor Node.js/npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    # Limit the number of open pull requests for npm dependencies
+    open-pull-requests-limit: 5
+    # Customize commit messages
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    # Target branch for pull requests
+    target-branch: "main"
+    # Group updates by dependency type for cleaner PRs
+    groups:
+      discord-dependencies:
+        patterns:
+          - "@discordjs/*"
+          - "discord.js"
+      node-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@discordjs/*"
+          - "discord.js"
+    # Automatically label PRs
+    labels:
+      - "dependencies"
+      - "javascript"
+    # Optional: Add reviewers (uncomment and customize as needed)
+    # reviewers:
+    #   - "your-github-username"
+    # Optional: Add assignees (uncomment and customize as needed)
+    # assignees:
+    #   - "your-github-username"
+
+  # Monitor GitHub Actions versions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    # Limit the number of open pull requests for GitHub Actions
+    open-pull-requests-limit: 5
+    # Customize commit messages
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    # Target branch for pull requests
+    target-branch: "main"
+    # Automatically label PRs
+    labels:
+      - "dependencies"
+      - "github-actions"
+    # Optional: Add reviewers (uncomment and customize as needed)
+    # reviewers:
+    #   - "your-github-username"
+    # Optional: Add assignees (uncomment and customize as needed)
+    # assignees:
+    #   - "your-github-username"

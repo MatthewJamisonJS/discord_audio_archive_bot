@@ -1,0 +1,60 @@
+# Include essential documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include SECURITY.md
+include FOLDER_STRUCTURE.md
+include HYBRID_DEPLOYMENT_GUIDE.md
+include OPEN_SOURCE_CHECKLIST.md
+
+# Include environment configuration templates
+include .env.example
+include .env.template
+
+# Include Node.js dependencies and configuration
+include package.json
+include package-lock.json
+
+# Include JavaScript voice recorder
+include voice_recorder.js
+
+# Include shell scripts
+include *.sh
+include dev_tools/*.sh
+
+# Include Windows batch scripts
+include *.bat
+
+# Exclude unnecessary files
+exclude .DS_Store
+exclude *.log
+exclude voice_commands.json
+exclude voice_status.json
+
+# Exclude development and build artifacts
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *$py.class
+global-exclude *.so
+global-exclude .Python
+global-exclude build/
+global-exclude dist/
+global-exclude *.egg-info/
+
+# Exclude version control
+global-exclude .git
+global-exclude .gitignore
+global-exclude .jj
+
+# Exclude virtual environments and dependencies
+prune venv
+prune node_modules
+prune recordings
+
+# Exclude test coverage and IDE files
+global-exclude .coverage
+global-exclude htmlcov/
+global-exclude .pytest_cache/
+global-exclude .mypy_cache/

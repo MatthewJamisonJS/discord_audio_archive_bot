@@ -1,0 +1,309 @@
+name: Release & Publish
+
+# Trigger on version tags (e.g., v1.0.0, v2.1.3)
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build Release Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for changelog generation
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine setuptools wheel
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create setup.py with version from tag
+        run: |
+          cat > setup.py << EOF
+          from setuptools import setup, find_packages
+
+          with open("README.md", "r", encoding="utf-8") as fh:
+              long_description = fh.read()
+
+          with open("requirements.txt", "r", encoding="utf-8") as fh:
+              requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+
+          setup(
+              name="audio-archive-bot",
+              version="${{ steps.get_version.outputs.VERSION }}",
+              author="Audio Archive Bot Contributors",
+              description="Discord bot for archiving voice channel audio with hybrid Python/Node.js architecture",
+              long_description=long_description,
+              long_description_content_type="text/markdown",
+              url="https://github.com/\${{ github.repository }}",
+              py_modules=["hybrid_bot", "voice_manager_hybrid", "test_hybrid_system"],
+              python_requires=">=3.8",
+              install_requires=requirements,
+              classifiers=[
+                  "Development Status :: 4 - Beta",
+                  "Intended Audience :: Developers",
+                  "License :: OSI Approved :: MIT License",
+                  "Programming Language :: Python :: 3",
+                  "Programming Language :: Python :: 3.8",
+                  "Programming Language :: Python :: 3.9",
+                  "Programming Language :: Python :: 3.10",
+                  "Programming Language :: Python :: 3.11",
+                  "Programming Language :: Python :: 3.12",
+              ],
+              extras_require={
+                  "dev": ["pytest", "pytest-cov", "pytest-asyncio", "black", "flake8", "isort"],
+              },
+          )
+          EOF
+
+      - name: Build distribution packages
+        run: python -m build
+
+      - name: Verify package
+        run: twine check dist/*
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+          retention-days: 7
+
+  test-package:
+    name: Test Release Package
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Install and test package
+        run: |
+          python -m pip install --upgrade pip
+          pip install dist/*.whl
+          python -c "import discord; print(f'Package test successful: discord.py {discord.__version__}')"
+
+  publish-pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: test-package
+    environment:
+      name: pypi
+      url: https://pypi.org/p/audio-archive-bot
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          skip-existing: true
+
+  publish-testpypi:
+    name: Publish to TestPyPI (Optional)
+    runs-on: ubuntu-latest
+    needs: test-package
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && contains(github.ref, '-rc')
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/audio-archive-bot
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: publish-pypi
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          # Extract changelog for this version if CHANGELOG.md exists
+          if [ -f CHANGELOG.md ]; then
+            echo "NOTES<<EOF" >> $GITHUB_OUTPUT
+            awk '/^## \['"${{ steps.get_version.outputs.VERSION }}"'\]/,/^## \[/{if(/^## \['"${{ steps.get_version.outputs.VERSION }}"'\]/)p=1; else if(/^## \[/)p=0; if(p)print}' CHANGELOG.md >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "NOTES=Release version ${{ steps.get_version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## Audio Archive Bot v${{ steps.get_version.outputs.VERSION }}
+
+            ${{ steps.release_notes.outputs.NOTES }}
+
+            ### Installation
+
+            ```bash
+            pip install audio-archive-bot==${{ steps.get_version.outputs.VERSION }}
+            ```
+
+            ### NPM Dependencies
+
+            This package also requires Node.js dependencies:
+            ```bash
+            npm install
+            ```
+
+            ### Quick Start
+
+            See the [README](https://github.com/${{ github.repository }}/blob/main/README.md) for setup instructions.
+
+            ---
+
+            ### Checksums
+
+            Verify package integrity using the attached distribution files.
+
+            ### What's Changed
+
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full details.
+          files: |
+            dist/*
+          draft: false
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
+          generate_release_notes: true
+
+  build-docker-release:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: publish-pypi
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/audio-archive-bot
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Create Dockerfile
+        run: |
+          cat > Dockerfile << 'EOF'
+          FROM node:20-slim
+
+          # Install Python and system dependencies
+          RUN apt-get update && apt-get install -y \
+              python3 \
+              python3-pip \
+              python3-venv \
+              ffmpeg \
+              && rm -rf /var/lib/apt/lists/*
+
+          # Set working directory
+          WORKDIR /app
+
+          # Copy package files
+          COPY package*.json ./
+          COPY requirements.txt ./
+
+          # Install Node.js dependencies
+          RUN npm ci --only=production
+
+          # Install Python dependencies
+          RUN pip3 install --no-cache-dir -r requirements.txt
+
+          # Copy application files
+          COPY . .
+
+          # Create recordings directory
+          RUN mkdir -p /app/recordings
+
+          # Set environment variables
+          ENV PYTHONUNBUFFERED=1
+
+          # Default command
+          CMD ["python3", "hybrid_bot.py"]
+          EOF
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -1,0 +1,17 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/MatthewJamisonJS/discord_audio_archive_bot/security/advisories/new
+    about: Report security vulnerabilities privately through GitHub Security Advisories
+  - name: General Questions & Discussions
+    url: https://github.com/MatthewJamisonJS/discord_audio_archive_bot/discussions
+    about: Ask questions, share ideas, or discuss the project with the community
+  - name: Documentation
+    url: https://github.com/MatthewJamisonJS/discord_audio_archive_bot/blob/main/README.md
+    about: Read the comprehensive setup and usage guide
+  - name: Contributing Guide
+    url: https://github.com/MatthewJamisonJS/discord_audio_archive_bot/blob/main/CONTRIBUTING.md
+    about: Learn how to contribute to the project
+  - name: Security Policy
+    url: https://github.com/MatthewJamisonJS/discord_audio_archive_bot/blob/main/SECURITY.md
+    about: Review our security practices and responsible disclosure process

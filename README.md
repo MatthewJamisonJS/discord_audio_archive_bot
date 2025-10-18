@@ -1,5 +1,12 @@
 # 🎙️ Discord Audio Archive Bot
 
+![PyPI version](https://badge.fury.io/py/audio-archive-bot.svg)
+![Python](https://img.shields.io/pypi/pyversions/audio-archive-bot)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![CI](https://github.com/MatthewJamisonJS/discord_audio_archive_bot/workflows/CI/badge.svg)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+![Security](https://img.shields.io/badge/security-bandit-yellow.svg)
+
 > **Preserve your Discord voice conversations with crystal-clear quality**
 
 **Welcome! 👋** This intelligent bot automatically captures Discord voice conversations in professional-quality MP3 format. Perfect for preserving important meetings, memorable gaming sessions, or special moments with friends.
@@ -15,9 +22,19 @@
 - Discord account
 - Internet connection
 
+### Option 0: Install via pip (Easiest) 🚀
+```bash
+# Install the package
+pip3 install audio-archive-bot
+
+# Run the bot
+audio_bot_run
+```
+*(Installs everything automatically - Python package only)*
+
 ### Option 1: Universal Auto-Setup ⚡
 ```bash
-curl -O https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/setup_universal.sh
+curl -O https://raw.githubusercontent.com/MatthewJamisonJS/discord_audio_archive_bot/main/setup_universal.sh
 chmod +x setup_universal.sh && ./setup_universal.sh
 ```
 *(Detects your platform and installs everything automatically)*
@@ -25,7 +42,7 @@ chmod +x setup_universal.sh && ./setup_universal.sh
 ### Option 2: Manual Setup 🔧
 ```bash
 # 1. Download the project
-git clone https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git
+git clone https://github.com/MatthewJamisonJS/discord_audio_archive_bot.git
 cd discord-audio-archive-bot
 
 # 2. Run setup script  
@@ -131,13 +148,19 @@ All credentials stay on your computer, no cloud services involved, minimal Disco
 
 ## 🚀 Running Your Bot
 
+### Quick Run (Recommended)
+```bash
+audio_bot_run
+```
+*(After pip installation)*
+
 ### Background Mode (Recommended)
 ```bash
 # macOS/Linux
 ./run_bot_forever.sh
 # Bot runs in background, survives restarts
 
-# Windows  
+# Windows
 ./run_bot_forever.bat
 # Creates Windows service for background operation
 ```
@@ -191,6 +214,7 @@ python test_hybrid_system.py
 | **"Email not sending"** | Use Gmail App Password, not regular password | *(Gmail requires App Passwords for third-party apps)* |
 | **"Python/Node.js not found"** | Run `./setup_universal.sh` again | *(Automatically installs missing dependencies)* |
 | **"FFmpeg not working"** | Install FFmpeg: `brew install ffmpeg` (macOS) | *(Required for audio format conversion)* |
+| **"Command not found: audio_bot_run"** | Install via pip: `pip3 install audio-archive-bot` | *(Creates console command in your PATH)* |
 
 ### Get Live Help
 ```bash
@@ -204,12 +228,35 @@ python -c "from voice_manager_hybrid import HybridVoiceManager; print(HybridVoic
 
 ---
 
+## 🔬 Development Setup
+
+Want to contribute or modify the bot? Here's how to set up a development environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/MatthewJamisonJS/discord_audio_archive_bot.git
+cd audio-archive-bot
+
+# Install in development mode with dev dependencies
+pip3 install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run tests
+python test_hybrid_system.py
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
+---
+
 ## 🌟 Contributing & Support
 
 We'd love your help making this even better!
 
 - **🐛 Found a bug?** → Use the Issues tab on this GitHub repository
-- **💡 Have an idea?** → Submit a feature request via GitHub Issues  
+- **💡 Have an idea?** → Submit a feature request via GitHub Issues
 - **🔧 Want to contribute?** → See [CONTRIBUTING.md](CONTRIBUTING.md)
 - **❓ Need help?** → Check the repository documentation and existing Issues
 

@@ -32,8 +32,22 @@ __pycache__/
 *.so
 build/
 dist/
+*.egg
 *.egg-info/
+.eggs/
 venv/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
 # Node.js
 node_modules/
